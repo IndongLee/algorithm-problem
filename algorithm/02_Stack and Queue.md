@@ -7,7 +7,7 @@
 ### 스택(Stack)의 개념
 목록 한 쪽 끝에서만 자료를 넣고 뺄 수 있는 `LIFO(Last In First Out)` 형식의 자료 구조
 
-
+<br />
 
 ### 스택의 연산
 
@@ -21,7 +21,7 @@
 
 - 푸시, 팝, 픽 모두 **O(1)**의 시간복잡도가 소요된다.
 
-
+<br />
 
 ### 스택(Stack)의 구현
 
@@ -35,44 +35,54 @@
 
 스택(Stack)은 `연결 리스트 `로 구현할 수 있다. `연결 리스트`의 같은 방향에서 아이템을 추가하고 삭제하도록 구현한다.
 
-```python
-class Stack(object):
-    def __init__(self, limit=10):
-        self.stack = []
-        self.limit = limit
+```kotlin
+class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
-    # for printing the stack contents
-    def __str__(self):
-        return ' '.join([str(i) for i in self.stack])
+class Stack<T>(var head: Node<T>? = null ) {
+    var size = 0
+    var tail: Node<T>? = null
 
-    # for pushing an element on to the stack
-    def push(self, data):
-        if len(self.stack) >= self.limit:
-            print('Stack Overflow')
-        else:
-            self.stack.append(data)
-            
-    # for popping the uppermost element
-    def pop(self):
-        if len(self.stack) <= 0:
-            return -1
-        else:
-            return self.stack.pop()
-       
-    def peek(self):
-        if isEmpty():
-            return -1
-        else:
-            return self.stack[len(self.stack) - 1]
-        
-    def isEmpty(self):
-        if len(self.stack) == 0:
-            return True
+    fun isEmpty() = size == 0
+
+    fun isNotEmpty() = size != 0
+
+    fun push(value: T) {
+        if (isEmpty()) {
+            tail = Node(value)
+            head = tail
+        } else {
+            tail!!.next = Node(value, tail)
+        }
+        size++
+    }
+
+    fun pop(): T {
+        val result = tail!!.value
+        when (size) {
+            0 -> throw Exception("Stack Underflow")
+            1 -> {
+                head = null
+                tail = null
+            }
+            else -> {
+                tail!!.prev!!.next = null
+                tail = tail!!.prev
+            }
+        }
+        size--
+        return result
+    }
+
+    fun peek(): T {
+        if (isEmpty()) throw Exception("Stack Underflow")
+        return tail!!.value
+    }
+}
 ```
 
+<br />
 
-
-
+<br />
 
 ### 스택(Stack)의 사용 사례
 - 재귀 알고리즘
@@ -95,16 +105,16 @@ class Stack(object):
   
 - 후위 표기법 계산
 
+<br />
 
-
-
+<br />
 
 ## 큐 (Queue)
 
 ### 큐(Queue)의 개념
 컴퓨터의 기본적인 자료 구조의 한가지로, 먼저 집어 넣은 데이터가 먼저 나오는 FIFO(First In First Out)구조로 저장하는 형식
 
-
+<br />
 
 ### 큐(Queue)의 연산
 큐(Queue)는 FIFO(First-In-First-Out) 를 따른다.
@@ -114,45 +124,57 @@ class Stack(object):
 - **peek()** : 큐에서 가장 위에 있는 항목을 반환한다.
 - **isEmpty()** : 큐가 비어 있을 때에 true를 반환한다.
 
-
+<br />
 
 ### 큐(Queue)의 구현
 큐(Queue)는 `연결 리스트` 로 구현할 수 있다. `연결 리스트`의 반대 방향에서 항목을 추가하거나 제거하도록 구현한다.
 
-```python
-class CircularQueue():
+```kotlin
+class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
-    # Constructor
-    def __init__(self):
-        self.queue = list()
-        self.head = 0
-        self.tail = 0
-        self.maxSize = 8
+class Queue<T>(var head: Node<T>? = null ) {
+    var size = 0
+    var tail: Node<T>? = null
 
-    # Adding elements to the queue
-    def enqueue(self,data):
-        if self.size() == self.maxSize-1:
-            return ("Queue Full!")
-        self.queue.append(data)
-        self.tail = (self.tail + 1) % self.maxSize
-        return True
+    fun isEmpty() = size == 0
 
-    # Removing elements from the queue
-    def dequeue(self):
-        if self.size()==0:
-            return ("Queue Empty!") 
-        data = self.queue[self.head]
-        self.head = (self.head + 1) % self.maxSize
-        return data
+    fun isNotEmpty() = size != 0
 
-    # Calculating the size of the queue
-    def size(self):
-        if self.tail>=self.head:
-            return (self.tail-self.head)
-        return (self.maxSize - (self.head-self.tail))
+    fun enqueue(value: T) {
+        if (isEmpty()) {
+            tail = Node(value)
+            head = tail
+        } else {
+            tail!!.next = Node(value, tail)
+        }
+        size++
+    }
+
+    fun dequeue(): T {
+        val result = head!!.value
+        when (size) {
+            0 -> throw Exception("Queue Underflow")
+            1 -> {
+                head = null
+                tail = null
+            }
+            else -> {
+                head!!.next!!.prev = null
+                head = head!!.next
+            }
+        }
+        size--
+        return result
+    }
+
+    fun peek(): T {
+        if (isEmpty()) throw Exception("Queue Underflow")
+        return head!!.value
+    }
+}
 ```
 
-
+<br />
 
 ### 큐(Queue)의 사용 사례
 데이터가 입력된 시간 순서대로 처리해야 할 필요가 있는 상황에 이용한다.
@@ -167,4 +189,6 @@ class CircularQueue():
 - 콜센터 고객 대기시간
 - 프린터의 출력 처리
 
+<br />
 
+<br />

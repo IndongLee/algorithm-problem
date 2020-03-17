@@ -110,7 +110,7 @@
 - 한 노드는 해당 노드의 `실제값(value)`과 다음 노드의 주소값이 담긴 `포인터(pointer)`로 구성돼 있다. 마지막 노드의 포인터는 `Null`값을 갖는다. 
 - 연결 리스트는 `단일 연결 리스트(singly-linked list)`, `이중 연결 리스트(doubly-linked list)`, `원형 연결 리스트(circularly-linked list)`로 나뉜다.
 
-
+<br/>
 
 ### 단일 연결 리스트
 
@@ -124,57 +124,74 @@
   - 리스트에 있는 모든 원소의 위치를 파악하기 위해서는 리스트의 첫 번째 원소에 대한 포인터나 레퍼런스가 있어야만 한다.
   - 이 포인터나 레퍼런스는 별도의 자료구조에 저장한다.
 
-
+<br/>
 
 #### 노드의 생성
 
-```python
-class Node(object):
-    def __init__(self, item=None, next=None):
-        self.item = item
-        self.next = next
+```kotlin
+class Node(var value: Any, var next: Node? = null)
 ```
 
-
+<br/>
 
 #### 리스트의 생성
 
-```python
-class LinkedList(object):
+```kotlin
+// 생성자를 통해 head node를 지정해준다.
+class LinkedList(var head: Node) {
+    var size = 0
+    var tail: Node? = null
     
-    # self.head를 통해 head node를 지정해준다.
-    def __init__(self, head=None):
-        self.head = head
-        self.size = 0
+    fun isEmpty() = size == 0
     
-    
-    def size(self):
-        return self.size
-    
-    
-    def is_empty(self):
-        return self.size == 0
-    
-class EmptyError(Exception):
-    pass
+    fun isNotEmpty() = size != 0
+}
 ```
 
-
+<br/>
 
 #### 노드의 삽입
 
-```python
-def insert_front(self, item):  # 연결 리스트의 맨 앞에 새 노드 삽입
-    if self.is_empty():  # 연결 리스트가 empty인 경우
-        self.head = self.Node(item, None)  # head가 새 노드 참조
-    else: # empty가 아닌 경우
-        self.head = self.Node(item, self.head)  # head가 새 노드 참조
-    self.size += 1
+```kotlin
+fun appendLeft(value: Any) {
+    if (isEmpty()) {
+        head = Node(value, null)
+        tail = head
+    } else {
+        head = Node(value, head)
+    }
+    size++
+}
 
-        
-def insert_after(self, item, p):  # p가 가리키는 노드 다음에 새 노드 삽입
-    p.next = SList.Node(item, p.next)  # 새 노드가 p 다음 노드가 됨
-    self.size += 1
+fun append(value: Any) {
+    if (isEmpty()) {
+        tail = Node(value, null)
+        head = tail
+    } else {
+        tail!!.next = Node(value, null)
+        tail = tail!!.next
+    }
+    size++
+}
+
+fun insert(value: Any, index: Int) {
+    if (size < index) throw Exception("Out of range")
+    when (index) {
+        0 -> appendLeft(value)
+        size -> append(value)
+        else -> {
+            var i = index
+            var cur = head
+            while (i > 1) {
+                cur = cur!!.next
+                i--
+            }
+            val temp = cur!!.next
+            cur.next = Node(value, temp)
+            size++
+        }
+    }
+}
 ```
 
 - `단일 연결 리스트`에서는 반드시 `head`를 추적해야 한다. 그렇지 않으면 언어에 따라 `가비지 컬렉터`에 의해 제거되거나 어딘가에서 길을 잃게 된다.
@@ -182,46 +199,66 @@ def insert_after(self, item, p):  # p가 가리키는 노드 다음에 새 노�
 - 단일 연결 리스트`에 있는 원소들은 다음 원소에 대한 연결고리를 통해서만 관리할 수 있기 때문에 리스트 중간에서 원소를 삽입 또는 삭제하려면 그 앞 원소의 연결고리를 수정해야 한다.
 - 주어진 연결리스트에 한 요소를 추가하는 연산의 계산복잡성은 리스트가 n개 요소로 구성돼 있을 때 **O(1)**이 된다. 전체 요소의 인덱스를 변경할 필요 없이 추가할 노드가 가리키는 다음 위치(포인터)를 기존 연결리스트의 요소에 연결하고, 추가할 새로운 노드를 기존 연결리스트의 이전 요소로 정의하기만 하면 되기 때문이다. 
 
-
+<br/>
 
 #### 노드의 삭제
 
-```python
-def delete_front(self):  # p가 가리키는 노드의 앞 노드 삭제
-    if self.is_empty():  # empty인 경우 에러 처리
-        raise EmptyError('Underflow')
-    else:
-        self.head = self.head.next  # head가 둘째 노드를 참조
-        self.size -= 1
+```kotlin
+fun popLeft(): Node {
+    if (isEmpty()) throw Exception("Underflow")
+    val result = head
+    head = head!!.next
+    if (size == 1) tail = null
+    size--
+    return result!!
+}
 
-        
-def delete_after(self, p):  # p가 가리키는 노드의 뒷 노드 삭제
-    if self.is_empty():  # empty인 경우 에러 처리
-        raise EmptyError('Underflow')
-    t = p.next
-    p.next = t.next  # p 다음 노드를 건너뛰어 연결
-    self.size -= 1
+fun pop(): Node {
+    when (size) {
+        0 -> throw Exception("Underflow")
+        1 -> return popLeft()
+    }
+    val result = tail
+    var cur = head
+    for (i in 1 until size - 1) {
+        cur = cur!!.next
+    }
+    cur!!.next = null
+    tail = cur
+    size--
+    return result!!
+}
 ```
 
 -  주어진 연결리스트의 요소를 삭제하는 연산의 계산복잡성은 리스트가 n개 요소로 구성돼 있을 때 **O(1)**이 된다.
 
-
+<br/>
 
 #### 노드 탐색
 
-``` python
-def search(self, target):
-    p = self.head
-    for k in range(self.size):
-        if target == p.item:
-            return k
+``` kotlin
+fun indexOf(target: Any): Int {
+    var p = head
+    for (k in 0 until size) {
+        if (target == p!!.value) return k
         p = p.next
-    return None
+    }
+    return -1
+}
+
+fun elementAt(index: Int): Node {
+    if (size < index) throw Exception("Out of range")
+    var cur = head
+    for (i in 1..index) {
+        cur = cur!!.next
+    }
+    return cur!!
+}
 ```
 
 -  주어진 연결리스트의 특정 위치에 있는 요소값을 읽거나 바꾸는 Access 연산의 계산복잡성은 **O(n)**이다. 예컨대 k번째 위치에 있는 값을 읽으려면 k개의 요소를 읽어들여야 하기 때문이다. 
 
-
+<br/>
 
 ### 이중 연결 리스트
 
@@ -231,23 +268,19 @@ def search(self, target):
 - 이중 연결 리스트는 앞과 뒤, 양쪽에 레퍼런스를 가짐으로서 이러한 단점을 보완한다.
 - 두 개의 레퍼런스를 요구한다는 단점이 존재한다.
 
-
+<br/>
 
 #### 노드의 생성
 
-```python
-class Node(object):
-    def __init__(self, item=None, prev=None, next=None):
-        self.item = item
-        self.prev = prev
-        self.next = next
+```kotlin
+class Node(var item: Any, var prev: Node? = null, var next: Node? = null)
 ```
 
 - 다음과 같이 이전 노드의 레퍼런스를 저장해 놓는다.
 
+<br/>
 
-
-
+<br/>
 
 ## 배열과 연결 리스트의 차이
 
@@ -260,7 +293,7 @@ class Node(object):
 
   **ArrayList**는 삽입과 삭제를 할 일이 없거나 배열의 끝에서만 하게 될 경우 유용하게 쓰일 수 있다. 원소에 대해 빠르게 접근할 수 있을 뿐만 아니라, 원소들이 메모리에 연속으로 배치해 있어 CPU 캐시 효율도 더욱 높다.
 
-
+<br/>
 
 ### LinkedList
 
@@ -268,7 +301,7 @@ class Node(object):
   - ArrayList와 달리 데이터의 추가, 삭제시 불필요한 데이터의 복사가 없어 데이터의 추가, 삭제시에 유리하다.
   - 반면, 데이터 검색 시에는 처음부터 노드를 순회하기 때문에 성능상 불리하다.
 
-
+<br/>
 
 ### 메모리 할당
 
@@ -277,7 +310,7 @@ class Node(object):
 - `LinkedList`에서 메모리는 새로운 node가 추가될 때 runtime에 할당되어 진다. 이것은 동적 메모리 할당이라고 한다.
 - **Heap** 영역에 메모리 할당이 이루어진다.
 
-
+<br/>
 
 ### 시간복잡도
 
@@ -289,9 +322,11 @@ class Node(object):
 |         임의의 위치의 원소 찾기          |           O(1)           |           O(N)            |
 |               크기 구하기                |           O(N)           |       O(N) or O(1)        |
 
-
+<br/>
 
 ### 결론
 
 - 삽입과 삭제가 빈번하다면 `연결 리스트`를 사용하는 것이 더 좋다.
 - 데이터의 접근하는 게 중요하다면 `배열 리스트`를 사용하는 것이 좋다.
+
+<br/>
