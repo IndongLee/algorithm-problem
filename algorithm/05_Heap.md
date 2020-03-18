@@ -157,7 +157,7 @@ fun <T: Comparable<T>> ArrayList<T>.heappop() {
 
 ```kotlin
 fun <T: Comparable<T>> ArrayList<T>.buildHeap() {
-    for (i in (size) / 2 downTo 1) {
+    for (i in size / 2 downTo 1) {
         this.heapify(i)
     }
 }

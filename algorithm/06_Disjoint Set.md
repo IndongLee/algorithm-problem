@@ -40,13 +40,9 @@
   - 배열 : **O(1)**, 한 번만에 x가 속한 집합 번호를 찾는다.
   - 트리 : **O(L)**, 노드의 집합 번호는 루트 노드이므로, 루트 노드를 확인하여 같은 집합인지 확인한다. 트리의 높이와 시간 복잡도가 동일하다. (최악 : **O(N - 1)**)
 
-```python
-def find(x):
-    # 루트 노드는 부모 노드 번호로 자기 자신을 가진다.
-    if root[x] == x:
-        return x
-    else:
-        return find(root[x])
+```kotlin
+// 루트 노드는 부모 노드 번호로 자기 자신을 가진다.
+tailrec fun find(x: Int): Int = if (root[x] == x) x else find(root[x])
 ```
 
 
@@ -59,21 +55,19 @@ def find(x):
   - 배열 : **O(N)**, 배열의 모든 원소를 순회하면서 y의 집합 번호를 x의 집합 번호로 바꾼다.
   - 트리 : **O(1)**, *find* 연산에서 이미 두 디스조인트 셋의 루트노드를 찾았기 때문에 이 두 루트노드 위치에 저장돼 있는 원소수 혹은 높이를 비교해 작은 쪽의 루트노드에 해당하는 S의 값을 큰 쪽 루트노드의 인덱스를 가리키도록 바꾸기만 하면 된다. 이 모든 연산이 **O(1)**에 해당한다.
 
-```python
-def union(x, y):
-    x = find(x)
-    y = find(y)
+```kotlin
+fun union(x: Int, y: Int) {
+    val xRoot = find(x)
+    val yRoot = find(y)
     
-    if x == y:
-        return False
+    if (xRoot == yRoot) return false
     
-    if rank[x] < rank[y]:
-        root[x] = y
-    else:
-        root[y] = x
-        
-        if rank[x] == rank[y]:
-            rank[x] += 1
+    if (rank[xRoot] < rank[yRoot]) root[xRoot] = yRoot
+    else {
+        root[yRoot] = xRoot
+        if (rank[rootX] == rank[rootY]) rank[rootX]++
+    }
+}
 ```
 
 
@@ -87,13 +81,12 @@ def union(x, y):
 - 모든 노드가 루트를 가리키도록 만드는 것. 트리나 배열에 부모 노드 인덱스 대신 루트 노드를 저장하는 방식이다.
 - 트리의 높이만큼 거슬러 올라가야 루트를 찾을 수 있던 find 연산의 비효율성을 완화한다.
 
-```python
-def find(x):
-    # 루트 노드는 부모 노드 번호로 자기 자신을 가진다.
-    if root[x] == x:
-        return x
-    else:
+```kotlin
+fun find(x: Int):
+    if (root[x] == x) return x
+    else {
         root[x] = find(root[x])
         return root[x]
+    }       
 ```
 

@@ -47,3 +47,7 @@ fun <T: Comparable<T>> ArrayList<T>.heappop() {
     val popValue = removeLast()
     heapify()
 }
+
+val root = arrayOf(1, 2, 3, 4)
+
+tailrec fun find(x: Int): Int = if (root[x] == x) x else find(root[x])
