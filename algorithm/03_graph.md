@@ -248,34 +248,37 @@
 
 #### DFS의 구현
 
-```python
-adj_list =  [[] for _ in range(V + 1)]
-'''
+```kotlin
+val adj_list = Array(V + 1) { arrayListOf() }
+
+/*
 인접 행렬의 경우
-adj_matrix = [[0] * (V + 1) for _ in range(V + 1)]과 같은 형태로 구현하면 된다.
-'''
-visited = [False] * (V + 1)
+val adj_matrix = Array(V + 1) { Array(V + 1) { 0 } }과 같은 형태로 구현하면 된다.
+*/
+val visited = Array(V + 1) { false }
 
 # 1. 재귀적 방법을 이용한 구현
-def dfs(node):
-    visited[node] = True
-    for next_node in adj_list[node]:
-        if not visited[next_node]:
-            dfs(next_node)
-    '''
-    for j in range(V + 1):
-        if adj_matrix[node][j] and not visited[j]:
-            dfs(j)
-    '''        
+fun dfs(node: Int):
+    visited[node] = true
+    for (next_node in adj_list[node]) {
+        if (!visited[next_node]) dfs(next_node)
+    }:
+
+    /*
+    for (j in 1..V) {
+        if (adj_matrix[node][j] && !visited[j]) dfs(j)
+    }
+    */        
             
 # 2. 스택을 이용한 구현
-stack = []
-stack.append(startnode)
-while stack:
+val stack: Stack<Int> = LinkedList()
+stack.add(startnode)
+while (stack.isNotEmpty()):
     node = stack.pop()
-    if not visited[node]:
-        visited[node] = True
-        stack.extend(adj[node])
+    if (!visited[node]) {
+        visited[node] = true
+        stack.addAll(adj[node])
+    }
 ```
 
 
@@ -296,16 +299,17 @@ while stack:
 
 #### BFS의 구현
 
-```python
-adj_list =  [[] for _ in range(V + 1)]
-'''
-인접 행렬의 경우
-adj_matrix = [[0] * (V + 1) for _ in range(V + 1)]과 같은 형태로 구현하면 된다.
-'''
-visited = [False] * (V + 1)
+```kotlin
+val adj_list = Array(V + 1) { arrayListOf() }
 
-queue = []
-queue.append(startnode)
+/*
+인접 행렬의 경우
+val adj_matrix = Array(V + 1) { Array(V + 1) { 0 } }과 같은 형태로 구현하면 된다.
+*/
+val visited = Array(V + 1) { false }
+
+val queue: Queue<Int> = linkedList()
+queue.add(startnode)
 visited[startnode] = True
 while queue:
     node = queue.pop(0)

@@ -24,7 +24,7 @@
 
 <br/>
 
-
+<br/>
 
 ## 트리 용어
 
@@ -89,6 +89,8 @@
 
 <br/>
 
+<br/>
+
 ## 이진 트리(Binary Tree)
 
 모든 노드들이 최대 2개의 서브 트리를 갖는 특별한 형태의 트리
@@ -97,7 +99,7 @@
 - 왼쪽 자식 노드(left child node)
 - 오른쪽 자식 노드(right child node)
 
-
+<br/>
 
 ### 이진 트리의 예
 
@@ -110,7 +112,7 @@
 
 <br/>
 
-
+<br/>
 
 ## 이진 트리의 종류
 
@@ -120,13 +122,13 @@
 - 높이가 h일 때, 최대 노드 개수인 (2<sup>h+1</sup> - 1)개의 노드를 가진 이진트리.
 - 루트를 1번으로 하여 2<sup>h+1</sup> - 1까지 정해진 위치에 대한 노드를 가진다.
 
-
+<br/>
 
 ### 완전 이진 트리 (Complete Binary Tree)
 
 - 높이가 h이고 노드 수가 n개일 때(단, 2<sup>h</sup> <= n < 2<sup>h+1</sup>-1), 포화 이진 트리의 노드 번호 1번부터 n번까지 빈 자리가 없는 이진 트리
 
-
+<br/>
 
 ### 편향 이진 트리 (Skewed Binary Tree)
 
@@ -136,14 +138,14 @@
 
 <br/>
 
-
+<br/>
 
 ## 이진 트리 - 순회(traversal)
 
 - 순회(traversal) : 트리의 각 노드를 중복되지 않게 전부 방문하는 것을 말한다. 트리는 비선형구조이기 때문에 선형구조에서와 같이 선후 연결 관계를 알 수 없다.
   - 이진 탐색 트리의 구현은 7. 이진 탐색 트리의 코드를 참조!
 
-
+<br/>
 
 ### 1. 깊이 우선 순회 (Depth First Traversal)
 
@@ -163,21 +165,21 @@
 
 - 전위 순회 알고리즘
 
-  ```python
-  class BinarySearchTree(object):
+  ```kotlin
+  class BinarySearchTree<T> where T : Comparable<T> {
       ...
-      def pro_order_traversal(self):
-          def _pre_order_traversal(root):
-              if root is None:
-                  pass
-              else:
-                  print(root.data)
-                  _pre_order_traversal(root.left)
-                  _pre_order_traversal(root.right)
-          _pre_order_traversal(self.root)
+      fun proOrderTraversal(node: Node<T> = root): Unit = when (node) {
+          Node.EmptyNode -> {}
+          is Node.Value -> {
+              println(node.value)
+              proOrderTraversal(node.left)
+              proOrderTraversal(node.right)
+          }
+      }
+  }
   ```
 
-
+<br/>
 
 #### 중위 순회(inorder traversal) : LVR
 
@@ -195,21 +197,21 @@
 
 - 중위 순회 알고리즘
 
-  ```python
-  class BinarySearchTree(object):
+  ```kotlin
+  class BinarySearchTree<T> where T : Comparable<T> {
       ...
-      def in_order_traversal(self):
-          def _in_order_traversal(root):
-              if root is None:
-                  pass
-              else:
-                  _in_order_traversal(root.left)
-                  print(root.data)
-                  _in_order_traversal(root.right)
-          _in_order_traversal(self.root)
+      fun inOrderTraversal(node: Node<T> = root): Unit = when (node) {
+          Node.EmptyNode -> {}
+          is Node.Value -> {
+              inOrderTraversal(node.left)
+              println(node.value)
+              inOrderTraversal(node.right)
+          }
+      }
+  }
   ```
 
-
+<br/>
 
 #### 후위 순회(postorder traversal) : LRV
 
@@ -227,21 +229,21 @@
 
 - 후위 순회 알고리즘
 
-  ```python
-  class BinarySearchTree(object):
+  ```kotlin
+  class BinarySearchTree<T> where T : Comparable<T> {
       ...
-      def post_order_traversal(self):
-          def _post_order_traversal(root):
-              if root is None:
-                  pass
-              else:
-                  _post_order_traversal(root.left)
-                  _post_order_traversal(root.right)
-                  print(root.data)
-          _post_order_traversal(self.root)
+      fun postOrderTraversal(node: Node<T> = root): Unit = when (node) {
+          Node.EmptyNode -> {}
+          is Node.Value -> {
+              postOrderTraversal(node.left)
+              postOrderTraversal(node.right)
+              println(node.value)
+          }
+      }
+  }
   ```
 
-
+<br/>
 
 ### 2. 너비 우선 순회 (Breadth First Traversal)
 
@@ -268,9 +270,8 @@
           _level_order_traversal(self.root)
   ```
 
-  
 
-
+<br/>
 
 <br/>
 
@@ -285,7 +286,7 @@
 - 노드 번호를 배열의 인덱스로 사용한다.
 - 따라서 높이가 h인 이진 트리를 위해선 2<sup>h+1</sup>-1만큼의 크기를 가진 배열이 필요하다.
 
-
+<br/>
 
 ### 노드 번호의 성질
 
@@ -294,7 +295,7 @@
 - 노드 번호가 i인 노드의 오른쪽 자식 노드 번호 : 2 * i + 1
 - 레벨 n의 시작 노드 번호 : 2<sup>n</sup>
 
-
+<br/>
 
 ### 배열을 통한 이진 트리 표현의 단점
 
@@ -304,7 +305,7 @@
 
 <br/>
 
-
+<br/>
 
 ## 이진 탐색 트리
 
@@ -316,95 +317,103 @@
 - 왼쪽 서브 트리와 오른쪽 서브 트리도 이진 탐색 트리다.
 - 중위 순회하면 오름차순으로 정렬된 값을 얻을 수 있다.
 
-
+<br/>
 
 ### 이진 탐색 트리의 구현
 
 1. 클래스 정의, 초기화
 
-   - 이진 탐색 트리를 구현하기 위해 먼저 `Node` 클래스를 정의한다. `Node`클래스는 노드값(`self.data`)과 좌/우 노드(`self.left`, `self.right`), 총 세 개의 속성을 가진다. 초기화할 때는 데이터 값만 주어지고 좌우 노드가 비어있다.
+   - 이진 탐색 트리를 구현하기 위해 먼저 `Node` 클래스를 정의한다. `Node`클래스는 노드값(`data`)과 좌/우 노드(`left`, `right`), 총 세 개의 속성을 가진다. 초기화할 때는 데이터 값만 주어지고 좌우 노드가 비어있다.
 
    ```python
-   class Node(object):
-       def __init__(self, data):
-           self.data = data
-           self.left = self.right = None
-        
+   class Node<T>(val data: T, var left: Node<T>? = null, var right: Node<T>? = null)
    ```
-
+   
 2. 이진 탐색 트리 클래스인 `BinarySearchTree`를 구현한다.
 
-   ```python
-   class BinarySearchTree(object):
-       def __init__(self):
-           self.root = None
-           
-       # 삽입 메서드 구현
-       def insert(self, data):
-           self.root = self.insert_value(self.root, data)
-           return self.root is not None
+   ```kotlin
+   class BinarySearchTree<T> where T : Comparable<T> {
+       private var root: Node<T>
        
-       def insert_value(self, node, data):
-           if node is None:
-               node = Node(data)
-           else:
-               if data <= node.data:
-                   node.left = self.insert_value(node.left, data)
-               else:
-                   node.right = self.insert_value(node.right, data)
-           return node
-           
-       # 탐색 메서드 구현
-       def find(self, key):
-           return self.find_value(self.root, key)
+       constructor() {
+           root = Node.EmptyNode
+       }
+   
+       constructor(newValue: T) {
+           root = Node.Value(newValue)
+       }
+   
+       // 삽입 메서드 구현
+       fun insert(data: T) {
+           root = insertData(root, data)
+           if (root == Node.EmptyNode) throw Exception("Insert Error")
+       }
+   
+       private fun insertData(node: Node<T>, data: T): Node<T> = when(node) {
+           Node.EmptyNode -> Node.Value(data)
+           is Node.Value -> {
+               if (data <= node.value) node.left = insertData(node.left, data)
+               else node.right = insertData(node.right, data)
+               node
+               }
+           }
+       }
        
-       def find_value(self, root, key):
-           if root is None or root.data == key:
-               return root is not None
-           elif key < root.data:
-               return self.find_value(root.left, key)
-           else:
-               return self.find_value(root.right, key)
-           
-       # 삭제 메서드 구현
-       # 삭제할 노드의 자식이 두 개일 때는 오른쪽 서브트리에서 가장 왼쪽 아래에 위치한 자손을 가져오면 된다. 이 원소는 왼쪽 서브트리의 모든 원소들보다 크면서, 오른쪽 서브트리의 나머지 원소보다 작다.
-       def delete(self, key):
-           self.root, deleted = self.delete_value(self.root, key)
-           return deleted
-       
-       def delete_value(self, node, key):
-           if node is None:
-               return node, False
-           
-           deleted = False
-           if key == node.data:
-               deleted = True
-               if node.left and node.right:
-                   parent, child = node, node.right
-                   while chlid.left is not None:
-                       parent, child = child, child.left
-                   child.left = node.left
-                   if parent != node:
-                       parent.left = child.right
-                       child.right = node.right
-                   node = child
-               elif node.left or node.right:
-                   node = node.left or node.right
-               else:
-                   node = None
-           elif key < node.data:
-               node = node.left or node.right
-           else:
-               node = None
-       elif key < node.data:
-           node.left, deleted = self.delete_value(node.left, key)
-       else:
-           node.right, deleted = self.delete_value(node.right, key)
-       return node, deleted
-          
+       // 탐색 메서드 구현
+       tailrec fun find(target: T, node: Node<T> = root): Boolean = when (node) {
+           Node.EmptyNode -> false
+           is Node.Value -> when {
+               target < node.value -> find(target, node.left)
+               target > node.value -> find(target, node.right)
+               target == node.value -> true
+               else -> false
+           }
+       }
+        
+       // 삭제 메서드 구현
+       /* 삭제할 노드의 자식이 두 개일 때는 오른쪽 서브트리에서 가장 왼쪽 아래에 위치한 자손을 가져오면 된다. 이 원소는 왼쪽 서브트리의 모든 원소들보다 크면서, 오른쪽 서브트리의 나머지 원소보다 작다. */
+       fun delete(value: T) {
+           root = deleteData(root, value)
+       }
+   
+       private fun deleteData(node: Node<T>, data: T): Node<T> = when (node) {
+           Node.EmptyNode -> Node.EmptyNode
+           is Node.Value -> {
+               if (data < node.value) {
+                   node.left = deleteData(node.left, data)
+                   node
+               }
+               else if (data > node.value) {
+                   node.right = deleteData(node.right, data)
+                   node
+               }
+               else {
+                   when {
+                       node.left is Node.Value && node.right == Node.EmptyNode -> node.left
+                       node.left == Node.EmptyNode && node.right is Node.Value -> node.right
+                       node.left == Node.EmptyNode && node.right == Node.EmptyNode -> Node.EmptyNode
+                       else -> {
+                           var parent: Node.Value<T> = node
+                           var child = node.right as Node.Value<T>
+                           while (child.left is Node.Value) {
+                               parent = child
+                               child = child.left as Node.Value<T>
+                           }
+                           child.left = node.left
+                           if (parent != node) {
+                               parent.left = child.right
+                               child.right = node.right
+                           }
+                           child
+                       }
+                   }
+               }
+           }
+       }
+   }
    ```
 
-
+<br/>
 
 ### 탐색 연산
 
@@ -412,7 +421,7 @@
 
 - 탐색할 키 값 x를 루트 노드의 키 값 k와 비교한다.
 
-  ```python
+  ```kotlin
   x == k : 탐색 성공.
   x < k : 루트 노드의 왼쪽 서브 트리에 대해 탐색 연산 수행.
   x > k : 루트 노드의 오른쪽 서브 트리에 대해 탐색 연산 수행.
@@ -422,7 +431,7 @@
 
 - 탐색을 수행할 서브 트리가 없으면 탐색에 실패하게 된다.
 
-
+<br/>
 
 ### 삽입 연산
 
@@ -431,7 +440,7 @@
    - 탐색에서 탐색 실패가 결정되는 위치가 삽입 위치가 된다.
 2. 탐색 실패한 위치에 원소를 삽입한다.
 
-
+<br/>
 
 ### 삭제 연산
 
@@ -439,7 +448,7 @@
 2. 노드를 삭제한다.
 3. 삭제된 노드의 서브트리를 이동한다.
 
-
+<br/>
 
 ### 이진 탐색 트리의 성능
 
@@ -453,13 +462,12 @@
 
 <br/>
 
-
+<br/>
 
 ## 그래프와 트리의 차이
 
 ![](images/04_Tree/tree7.png)
 
+<br/>
 
-
-
-
+<br/>
