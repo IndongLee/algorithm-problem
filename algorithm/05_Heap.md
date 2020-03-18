@@ -24,11 +24,11 @@
   
 - 힙 트리에서는 중복된 값을 허용한다. (이진 탐색 트리에서는 중복된 값을 허용하지 않는다.)
 
-
+<br />
 
 ![](images/05_Heap/heap00.png)
 
-
+<br />
 
 ### 힙의 종류
 
@@ -44,16 +44,16 @@
 - 부모 노드의 키 값 < 자식 노드의 키 값
 - 루트 노드 : 키 값이 가장 작은 노드
 
-
+<br />
 
 ### 힙 vs 이진 탐색 트리
 
 - 힙은 각 노드의 값이 자식노드보다 큰 반면, 이진탐색트리는 왼쪽 자식노드가 제일 작고 부모노드가 그 다음 크며 오른쪽 자식노드가 가장 큰 값을 가진다.
 -  힙은 우선순위(키) 정렬에, 이진탐색트리는 탐색에 강점을 지닌 자료구조라고 볼 수 있다. 
 
+<br />
 
-
-
+<br />
 
 ## 힙(heap)의 구현
 
@@ -72,7 +72,7 @@
   - 오른쪽 자식의 인덱스 = (부모의 인덱스) * 2 + 1
   - 부모의 인덱스 = (자식의 인덱스) / 2
 
-
+<br />
 
 ### heapify
 
@@ -80,23 +80,23 @@
 
 <img src="images/05_Heap/heap03.png" style="zoom:50%;" />
 
-```python
-def heapify(unsorted, index, heap_size):
-    largest = index
-    left_index = 2 * index + 1
-    right_index = 2 * index + 2
-    if left_index < heap_size and unsorted[left_index] > unsorted[largest]:
-        largest = left_index
-    if right_index < heap_size and unsorted[right_index] > unsorted[largest]:
-        largest = right_index
-    if largest != index:
-        unsorted[largest], unsorted[index] = unsorted[index], unsorted[largest]
-        heapify(unsorted, largest, heap_size)
+```kotlin
+tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 1, heapSize: Int = size) {
+    val leftIndex = index * 2
+    val rightIndex = index * 2 + 1
+    var largest = index
+    if (rightIndex < heapSize && this[rightIndex] > this[largest]) largest = rightIndex
+    if (leftIndex < heapSize && this[leftIndex] > this[largest]) largest = leftIndex
+    if (largest != index) {
+        Collections.swap(this, index, largest)
+        heapify(largest)
+    }
+}
 ```
 
 - 시간복잡도 : **O(logn)**, 최악의 경우 루트 노드에서 단말 노드까지 값을 비교해야 하므로 트리의 높이에 의존적이다.
 
-
+<br />
 
 ### 삽입
 
@@ -105,20 +105,22 @@ def heapify(unsorted, index, heap_size):
 
 <img src="images/05_Heap/heap04.png" style="zoom:48%;" />
 
+<br />
 
-
-```python
-# 최대힙
-def heappush(heap, item):
-    heap.append(item)
-    idx = len(heap)
-    while idx != 1 and item > heap[idx//2]:
-        heap[idx], heap[idx//2] = heap[idx//2], heap[idx]
-        idx //= 2
-    return heap
+```kotlin
+// 최대힙
+fun <T: Comparable<T>> ArrayList<T>.heappush(item: T) {
+    var idx = size
+    if (idx == 0) add(item)
+    add(item)
+    while (idx != 1 && item > this[idx/2]) {
+        Collections.swap(this, idx, idx/2)
+        idx /= 2
+    }
+}
 ```
 
-
+<br />
 
 ### 삭제
 
@@ -129,31 +131,21 @@ def heappush(heap, item):
 
 ![](images/05_Heap/heap05.png)
 
+<br />
 
-
-```python
-def heappop(heap):
-    pop_value = heap[1]
-    heap[1] = heap.pop()
-    heap_size = len(heap)
-    parent = 1
-    child = 2
-    while child <= heap_size:
-        if child < heap_size and (heap[child] < heap[child+1]):
-            child += 1
-        if heap[parent] >= heap[child]:
-            break
-        heap[parent], heap[child] = heap[child], heap[parent]
-        parent = child
-        child *= 2
-    return pop_value
+```kotlin
+fun <T: Comparable<T>> ArrayList<T>.heappop() {
+    Collections.swap(this, 1, size-1)
+    val popValue = removeLast()
+    heapify()
+}
 ```
 
-
+<br />
 
 ### build heap
 
- 잎새노드를 가지지 않는 노드(=배열의 개수를 2로 나눈 몫을 인덱스로 하는 노드)부터 차례대로 *heapify*를 수행한다.. 하단 좌측그림에서 보는 것처럼 8, 13, 4, 7 순서대로 **위에서 아래로** *heapify*를 수행한니다. 
+ 잎새노드를 가지지 않는 노드(=배열의 개수를 2로 나눈 몫을 인덱스로 하는 노드)부터 차례대로 *heapify*를 수행한다. 하단 좌측그림에서 보는 것처럼 8, 13, 4, 7 순서대로 **위에서 아래로** *heapify*를 실시한다. 
 
 ![](images/05_Heap/heap06.png)
 
@@ -162,3 +154,15 @@ def heappop(heap):
 ![](images/05_Heap/heap08.png)
 
 - 시간복잡도 : **O(n)**, 비어 있는 힙에 차례로 insert 연산을 수행해 힙을 만들어 가는 방식(**O(nlogn)**)보다 효율적이다.
+
+```kotlin
+fun <T: Comparable<T>> ArrayList<T>.buildHeap() {
+    for (i in (size) / 2 downTo 1) {
+        this.heapify(i)
+    }
+}
+```
+
+<br />
+
+<br />
