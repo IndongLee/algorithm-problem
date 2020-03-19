@@ -163,35 +163,43 @@ for (edge in edges) {
 
 ### Prim 알고리즘의 구현
 
-```python
-from heapq import heappop, heappush
+```kotlin
+data class Edge(val weight: Int, val node: Int) : Comparable<Edge> {
+    override fun compareTo(other: Edge) = when {
+        weight < other.weight -> -1
+        weight > other.weight -> 1
+        else -> 0
+    }
+}
 
-
-# 우선순위 큐와 다익스트라 알고리즘을 바탕으로 정점을 선택한다.
-INF = float('inf')
-def prim(start):
-    # 처음엔 모든 정점의 비용을 무한대로 초기화 한다.
-    cost = [INF] * (N + 1)
-    vis = [False] * (N + 1)
-    q = []
-    # 시작 정점을 queue에 삽입하고 비용을 0으로 바꾼다.
-    heappush(q, (0, start))
+// 우선순위 큐와 다익스트라 알고리즘을 바탕으로 정점을 선택한다.
+val INF = Int.MAX_VALUE
+fun prim(start):
+    // 처음엔 모든 정점의 비용을 무한대로 초기화 한다.
+    val cost = Array(N + 1) { INF }
+    val vis = Array(N + 1) { false }
+    val queue = arrayListOf(Edge(0, start))
+    // 시작 정점을 queue에 삽입하고 비용을 0으로 바꾼다.
     cost[start] = 0
-    while q:
-        # 비용이 낮은 경로부터 탐색하며 정점을 선택한다.
-        cur_cost, node = heappop(q)
-        # 중복 선택을 막기 위해 경로를 확인한 정점은 방문 표시를 해준다.
-        vis[node] = True
-        for next, next_cost in adj[node]:
-            # 1. 방문할 정점에 기록되어 있는 비용보다 새로 탐색할 경로의 비용이 작고
-            # 2. 아직 방문하지 않은 정점일 경우에만
-            # heappush를 실시한다.
-            if cost[next] > next_cost and not vis[next]:
-                cost[next] = next_cost
-                heappush(q, (next_cost, child))
+    while (queue) {
+        // 비용이 낮은 경로부터 탐색하며 정점을 선택한다.
+        val cur = queue.heappop()
+        // 중복 선택을 막기 위해 경로를 확인한 정점은 방문 표시를 해준다.
+        vis[cur.node] = true
+        for (next in adj[cur.node]) {
+            // 1. 방문할 정점에 기록되어 있는 비용보다 새로 탐색할 경로의 비용이 작고
+            // 2. 아직 방문하지 않은 정점일 경우에만
+            // heappush를 실시한다.
+            if (cost[next.node] > next.weight && !vis[next.node]) {
+                cost[next.node] = next.weight
+                queue.heappush(Edge(next.weight, next.node))
+            }
+        }
+    }
     return cost
 ```
 
 - 시간복잡도
   - 우선순위 큐를 사용하지 않았을 경우 : **O(V<sup>2</sup>)**, 주 반복문이 정점의 수 V만큼 반복하고, 내부 반복문 역시 V번 반복되기 때문.
   - 우선순위 큐를 사용할 경우 : **O((V + E)logV)**
+
