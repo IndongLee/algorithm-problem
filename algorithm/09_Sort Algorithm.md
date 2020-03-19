@@ -10,7 +10,7 @@
 
 <img src="images/09_Sort/sort00.png" style="zoom:80%;" />
 
-
+<br />
 
 ### 버블 정렬의 특징
 
@@ -23,18 +23,27 @@
 - 일반적으로 자료의 교환 작업(SWAP)이 자료의 이동 작업(MOVE)보다 더 복잡하기 때문에 버블 정렬은 단순성에도 불구하고 거의 쓰이지 않는다.
 - 이미 정렬되어 있는 데이터에 적합한 기법이다.
 
-
+<br />
 
 ### 버블 정렬의 구현
 
-```python
-def bubbleSort(array):
-    for order in range(len(array), 0, -1):
-        for i in range(order):
-            if array[i] > array[i+1]:
-                array[i], array[i+1] = array[i+1], array[i]
-    return array
+```kotlin
+fun <T> Array<T>.swap(left: Int, right: Int) {
+    val save = this[left]
+    this[left] = this[right]
+    this[right] = save
+}
 
+fun <T: Comparable<T>> bubbleSort(array: Array<T>): Array<T> {
+    for (order in array.size downTo 0) {
+        for (i in 0 until order) {
+            if (array[i] > array[i+1]) {
+                array.swap(i, i+1)
+            }
+        }
+    }
+    return array
+}
 ```
 
 - 시간복잡도 : **O(N<sup>2</sup>)**
@@ -46,9 +55,9 @@ def bubbleSort(array):
     입력 자료가 이미 정렬되어 있는 최상의 경우, 자료의 이동이 발생하지 않는다.
   - *T(n)* = **O(N<sup>2</sup>)**
 
+<br />
 
-
-
+<br />
 
 ## 선택 정렬(Selection Sort)
 
@@ -58,7 +67,7 @@ def bubbleSort(array):
 
 <img src="images/09_Sort/sort01.png" style="zoom: 25%;" />
 
-
+<br />
 
 ### 선택 정렬의 특징
 
@@ -71,7 +80,7 @@ def bubbleSort(array):
 - `제자리 정렬(in-place sorting) 알고리즘`의 하나
   - 입력 리스트(정렬되지 않은 값들) 이외에 다른 추가 메모리를 요구하지 않는 정렬 방법
 
-
+<br />
 
 ### 선택 정렬의 원리
 
@@ -85,19 +94,21 @@ def bubbleSort(array):
   - 맨 처음 위치를 뺀 나머지 리스트를 같은 방법으로 교체한다.
   - 하나의 원소만 남을 때까지 위의 1~3 과정을 반복한다.
 
-
+<br />
 
 ### 선택 정렬의 구현
 
-```python
-def selectionSort(array):
-    for order in range(len(array)):
-        min_idx = order
-        for i in range(order, len(array)):
-            if array[i] < array[min_idx]:
-                min_idx = i
-        array[min_idx], array[order] = array[order], array[min_idx]
+```kotlin
+fun <T: Comparable<T>> selectSort(array: Array<T>): Array<T> {
+    for (order in 0 until array.size) {
+        var minIndex = order
+        for (i in order until array.size) {
+            if (array[i] < array[minIndex]) minIndex = i
+        }
+        array.swap(minIndex, order)
+    }
     return array
+}
 ```
 
 - 시간복잡도 : **O(N<sup>2</sup>)**
@@ -110,9 +121,9 @@ def selectionSort(array):
     - 한 번 교환하기 위하여 3번의 이동(SWAP 함수의 작업)이 필요하므로 *3(n-1)*번
   - *T(n) = (n - 1) + (n - 2) + … + 2 + 1 = n (n - 1)/2 =* **O(N<sup>2</sup>)**
 
+<br />
 
-
-
+<br />
 
 ## 삽입 정렬(Insertion Sort)
 
@@ -120,11 +131,11 @@ def selectionSort(array):
 
 - 매 순서마다 해당 원소를 삽입할 수 있는 위치를 찾아 해당 위치에 넣는다.
 
-
+<br />
 
 ![](images/09_Sort/sort02.png)
 
-
+<br />
 
 ### 삽입 정렬의 특징
 
@@ -139,7 +150,7 @@ def selectionSort(array):
   - 비교적 많은 레코드들의 이동을 포함한다.
 - 레코드 수가 많고 레코드 크기가 클 경우에 적합하지 않다.
 
-
+<br />
 
 ### 삽입 정렬의 원리
 
@@ -147,20 +158,23 @@ def selectionSort(array):
 - 즉, 두 번째 자료는 첫 번째 자료, 세 번째 자료는 두 번째와 첫 번째 자료, 네 번째 자료는 세 번째, 두 번째, 첫 번째 자료와 비교한 후 자료가 삽입될 위치를 찾는다. 자료가 삽입될 위치를 찾았다면 그 위치에 자료를 삽입하기 위해 자료를 한 칸씩 뒤로 이동시킨다.
 - 처음 Key 값은 두 번째 자료부터 시작한다.
 
-
+<br />
 
 ### 삽입 정렬의 구현
 
-```python
-def insertionSort(array):
-    for i in range(1, len(array)):
-        j = i - 1
-        key = array[i]
-        while array[j] > key and j >= 0:
+```kotlin
+fun <T: Comparable<T>> insertSort(array: Array<T>): Array<T> {
+    for (i in 1 until array.size) {
+        var j = i - 1
+        val key = array[i]
+        while (j >= 0 && array[j] > key) {
             array[j+1] = array[j]
-            j = j -1
+            j = j-1
+        }
         array[j+1] = key
+    }
     return array
+}
 ```
 
 - 시간복잡도 : **O(N)** - 최선의 경우, **O(N<sup>2</sup>)** - 최악의 경우
@@ -178,7 +192,7 @@ def insertionSort(array):
     *n (n - 1) / 2 + 2(n - 1) = (n<sup>2</sup> + 3n - 4) / 2* = **O(N<sup>2</sup>)** 
   - *Worst T(n)* =**O(N<sup>2</sup>)** 
 
-
+<br />
 
 ## 셸 정렬(Shell Sort)
 
@@ -190,11 +204,11 @@ def insertionSort(array):
 - 즉, 만약 삽입되어야 할 위치가 현재 위치에서 상당히 멀리 떨어진 곳이라면 많은 이동을 해야만 제자리로 갈 수 있다.
 - `삽입 정렬`과 다르게 `셸 정렬`은 전체의 리스트를 한번에 정렬하지 않는다.
 
-
+<br />
 
 <img src="images/09_Sort/sort03.png" style="zoom: 33%;" />
 
-
+<br />
 
 ### 셸 정렬의 특징
 
@@ -203,7 +217,7 @@ def insertionSort(array):
   - 부분 리스트는 어느 정도 정렬이 된 상태이기 때문에 부분 리스트의 개수가 1이 되게 되면 셸 정렬은 기본적으로 삽입 정렬을 수행하는 것이지만 삽입 정렬보다 더욱 빠르게 수행된다.
   - 알고리즘이 간단하여 프로그램으로 쉽게 구현할 수 있다.
 
-
+<br />
 
 ### 셸 정렬의 원리
 
@@ -215,7 +229,7 @@ def insertionSort(array):
   - 간격을 절반으로 줄일 때 짝수가 나오면 +1을 해서 홀수로 만든다.
 - 간격 *k*가 1이 될 때까지 반복한다.
 
-
+<br />
 
 ### 셸 정렬의 구현
 
@@ -244,15 +258,15 @@ def shellSort(array):
 
 - 시간복잡도 : **O(N<sup>1.5</sup>)** - 평균적인 경우, **O(N<sup>2</sup>)** - 최악의 경우
 
+<br />
 
-
-
+<br />
 
 ## 계수 정렬(Counting Sort)
 
  정렬되어 있지 않은 리스트를 정렬하기 위해 각각의 값이 몇 개 있는지 세는 작업을 하고, 선형 시간에 정렬하는 알고리즘
 
-
+<br />
 
 <img src="images/09_Sort/sort04.png" style="zoom: 80%;" />
 
@@ -263,7 +277,7 @@ def shellSort(array):
 - 단점
   - 리스트에 특이값이 존재할 경우 공간복잡도와 시간복잡도가 비약적으로 상승한다.
 
-
+<br />
 
 ### 계수 정렬의 원리
 
@@ -279,7 +293,7 @@ def shellSort(array):
 
 - 3번 리스트를 이용하여 4번 배열에 각 번호에 맞게 값을 하나씩 주고, -1씩 해준다.
 
-
+<br />
 
 ### 계수 정렬의 구현
 
@@ -318,9 +332,9 @@ def counting_sort(A, k):
   - C를 만드는 시간 **O(N+k)**
   - 다시 숫자를 B에 채워넣는 데 드는 시간 **O(N)**
 
+<br />
 
-
-
+<br />
 
 ## 합병 정렬(Merge Sort)
 
@@ -330,7 +344,7 @@ def counting_sort(A, k):
 
 ![](images/09_Sort/sort05.png)
 
-
+<br />
 
 ### 합병 정렬의 특징
 
@@ -346,7 +360,7 @@ def counting_sort(A, k):
     - `제자리 정렬(in-place sorting)`이 아니다.
   - 레코드들의 크기가 큰 경우에는 이동 횟수가 많으므로 매우 큰 시간적 낭비를 초래한다.
 
-
+<br />
 
 ### 합병 정렬의 원리
 
@@ -360,40 +374,37 @@ def counting_sort(A, k):
   - 만약 둘 중 하나의 리스트가 먼저 끝나게 되면 나머지 리스트의 값들을 전부 새로운 리스트로 복사한다.
   - 새로운 리스트를 원래의 리스트로 옮긴다.
 
-
+<br />
 
 ### 합병 정렬의 구현
 
-```python
-def m_sort(start, end):
-    global N
-    if start + 1 == end:
-        return [arr[start]]
-    mid = (start + end) // 2
-    l = m_sort(start, mid)
-    r = m_sort(mid, end)
-    return merge(l, r)
+```kotlin
+fun Array<Int>.mergeSort(start: Int, end: Int): Array<Int> {
+    if (start + 1 == end) return Array(1) { this[start] }
+    val mid = (start + end) / 2
+    val left = mergeSort(start, mid)
+    val right = mergeSort(mid, end)
+    return merge(left, right)
+}
 
 
-def merge(left, right):
-    i = 0
-    j = 0
-    sorted_list = []
-    len_l = len(left)
-    len_r = len(right)
-    while i < len_l and j < len_r:
-        if left[i] < right[j]:
-            sorted_list.append(left[i])
-            i += 1
-        else:
-            sorted_list.append(right[j])
-            j += 1
-    if i < len_l:
-        sorted_list += left[i:]
-    else:
-        sorted_list += right[j:]
-    
-    return sorted_list
+fun merge(left: Array<Int>, right: Array<Int>): Array<Int> {
+    var i = 0
+    var j = 0
+    val sizeL = left.size
+    val sizeR = right.size
+    val sortedList = Array(sizeL + sizeR) { 0 }
+    var index = 0
+    while (i < sizeL && j < sizeR) {
+        when {
+            left[i] < right[j] -> sortedList[index++] = left[i++]
+            else -> sortedList[index++] = right[j++]
+        }
+    }
+    while (i < sizeL) sortedList[index++] = left[i++]
+    while (j < sizeR) sortedList[index++] = right[j++]
+    return sortedList
+}
 ```
 
 #### 시간복잡도 : **O(NlogN)**
@@ -424,7 +435,7 @@ def merge(left, right):
 
 - *T(N) = Nlog₂N(비교) + 2Nlog₂N(이동) = 3Nlog₂N* = **O(nlog₂n)**
 
-
+<br />
 
 ## 퀵 정렬(Quick Sort)
 
@@ -440,11 +451,11 @@ def merge(left, right):
   분할 정복 방법은 대개 순환 호출을 이용하여 구현한다.
   ```
 
-
+<br />
 
 <img src="images/09_Sort/sort07.png" style="zoom:33%;" />
 
-
+<br />
 
 ### 퀵 정렬의 특징
 
@@ -458,7 +469,7 @@ def merge(left, right):
 - 퀵 정렬의 불균형 분할을 방지하기 위하여 피벗을 선택할 때 더욱 리스트를 균등하게 분할할 수 있는 데이터를 선택한다.
   EX) 리스트 내의 몇 개의 데이터 중에서 크기순으로 중간 값(medium)을 피벗으로 선택한다.
 
-
+<br />
 
 ### 퀵 정렬의 원리
 
@@ -468,28 +479,40 @@ def merge(left, right):
   - **결합(Combine)** : 정렬된 부분 배열들을 하나의 배열에 합병한다.
 - 순환 호출이 한번 진행될 때마다 최소한 하나의 원소(피벗)는 최종적으로 위치가 정해지므로, 이 알고리즘은 반드시 끝난다는 것을 보장할 수 있다.
 
-
+<br />
 
 ### 퀵 정렬의 구현
 
-```python
-def quickSort(l, r):
-    if l < r:
-        pivot = partition(l, r)
-        quickSort(pivot+1, r)
-        quickSort(l, pivot-1)
-        
-        
-def partition(l, r):
-    # pivot을 무작위로 정했을 때 가장 효율이 높다.
-    pivot = arr[r]
-    i = l - 1
-    for j in range(l, r):
-        if arr[j] <= pivot:
-            i += 1
-            arr[i], arr[j] = arr[j], arr[i]
-    arr[i+1], arr[r] = arr[r], arr[i+1]
+```kotlin
+fun <T: Comparable<T>> Array<T>.quickSort(left: Int, right: Int) {
+    if (left < right) {
+        val pivot = this.partitionArray(left, right)
+        quickSort(pivot+1, right)
+        quickSort(left, pivot-1)
+    }
+}
+
+fun <T: Comparable<T>> Array<T>.partitionArray(left: Int, right: Int): Int {
+    val pivot = this[right]
+    var i = left - 1
+    for (j in left until right) {
+        if (this[j] <= pivot) {
+            i++
+            swap(i, j)
+        }
+    }
+    swap(i+1, right)
     return i + 1
+}
+
+// 함수형 프로그래밍을 이용한 방법
+fun <T : Comparable<T>> List<T>.quickSort(): List<T> = 
+    if(size < 2) this
+    else {
+        val pivot = first()
+        val (smaller, greater) = drop(1).partition { it <= pivot}
+        smaller.quickSort() + pivot + greater.quickSort()
+    }
 ```
 
 #### 시간복잡도 : O(NlogN)
@@ -540,9 +563,9 @@ def partition(l, r):
   - 시간 복잡도가 O(nlog₂n)를 가지는 다른 정렬 알고리즘과 비교했을 때도 가장 빠르다.
   - 퀵 정렬이 불필요한 데이터의 이동을 줄이고 먼 거리의 데이터를 교환할 뿐만 아니라, 한 번 결정된 피벗들이 추후 연산에서 제외되는 특성 때문이다.
 
+<br />
 
-
-
+<br />
 
 ## 힙 정렬(Heap Sort)
 
@@ -550,7 +573,7 @@ def partition(l, r):
 
 - 내림차순 정렬을 위해선 최대 힙을, 오름차순 정렬을 위해선 최소 힙을 만든다.
 
-
+<br />
 
 ### 힙 정렬의 특징
 
@@ -558,7 +581,7 @@ def partition(l, r):
   - 시간 복잡도가 좋은편
   - 힙 정렬이 가장 유용한 경우는 전체 자료를 정렬하는 것이 아니라 가장 큰 값 몇개만 필요할 때 이다.
 
-
+<br />
 
 ### 힙 정렬의 원리
 
@@ -567,30 +590,30 @@ def partition(l, r):
 - 그 다음으로 한 번에 하나씩 요소를 힙에서 꺼내서 배열의 뒤부터 저장하면 된다.
 - 삭제되는 요소들(최댓값부터 삭제)은 값이 감소되는 순서로 정렬되게 된다.
 
-
+<br />
 
 ### 힙 정렬의 구현
 
-```python
-def heap_sort(a):
-    def heapify(a, size, i):
-    	largest = i
-    	L = 2 * i + 1
-    	R = 2 * i + 2
-    	if L < size and a[i] < a[L]: 
-            largest = L
-    	if R < size and a[largest] < a[R]:
-            largest = R
-    	if largest != i:
-    		a[i], a[largest] = a[largest], a[i]
-    		heapify(a, size, largest)
-            
-            
-    size = len(a)
-    for i in range(size, -1, -1):
-        heapify(a, size, i)
-    for i in range(size-1, 0, -1):
-    	a[i], a[0] = a[0], a[i]
-    	heapify(a, i, 0)
+```kotlin
+tailrec fun <T: Comparable<T>> Array<T>.heapify(index: Int = 0, heapSize: Int = size) {
+        val leftIndex = index * 2 + 1
+        val rightIndex = index * 2 + 2
+        var largest = index
+        if (rightIndex < heapSize && this[rightIndex] < this[largest]) largest = rightIndex
+        if (leftIndex < heapSize && this[leftIndex] < this[largest]) largest = leftIndex
+        if (largest != index) {
+            swap(index, largest)
+            heapify(largest)
+        }
+    }
+
+fun <T: Comparable<T>> Array<T>.heapSort() {
+    val n = size
+    for (i in n/2 downTo 0 step 1) this.heapify(i, n)
+    for (i in n-1 downTo 0 -1) {
+        swap(0, i)
+        heapify(0, i)
+    }
+}
 ```
 
