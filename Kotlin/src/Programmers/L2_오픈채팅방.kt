@@ -8,7 +8,7 @@ fun solution(record: Array<String>): Array<String> {
             if (rec.size == 3) userMap[rec[1]] = rec[2]
             Pair(rec[1], rec[0])
         }.asSequence().filter { it.second[0] != 'C' }
-        .map { "\"${userMap[it.first]}님이 ${command[it.second]}\"" }.toList().toTypedArray()
+        .map { "${userMap[it.first]}님이 ${command[it.second]}" }.toList().toTypedArray()
 }
 
 fun main() {
