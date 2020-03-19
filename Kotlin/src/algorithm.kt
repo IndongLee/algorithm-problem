@@ -1,22 +1,37 @@
 import java.util.*
 import kotlin.collections.ArrayList
 
-fun main() {
-    val heap = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-    println(heap)
-    heap.buildHeap()
-    println(heap)
-    for (i in 1..9) {
-        heap.heappop()
-        println(heap)
+data class Edge(val weight: Int, val node: Int) : Comparable<Edge> {
+    override fun compareTo(other: Edge) = when {
+        weight < other.weight -> -1
+        weight > other.weight -> 1
+        else -> 0
     }
+}
+
+fun main() {
+    val INF = Int.MAX_VALUE
+    val dis = Array( V + 1 ) { INF }
+    dis[1] = 0
+
+    for (i in 1..V) {
+        // path = [[1, 2, 8], [1, 3, -2], ... , [4, 6, 5]]
+        for (path in paths) {
+            temp = dis[path[0]] + path[2]
+            if (dis[path[1]] > temp) dis[path[1]] = temp
+        }
+    }
+
+    for (path in paths) {
+        if (dis[path[1]] <= dis[path[0]] + path[2]) return false
+    }
+    retrun true
 
 }
 
-
-tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 1, heapSize: Int = size) {
-    val leftIndex = index * 2
-    val rightIndex = index * 2 + 1
+tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 0, heapSize: Int = size) {
+    val leftIndex = index * 2 + 1
+    val rightIndex = index * 2 + 2
     var largest = index
     if (rightIndex < heapSize && this[rightIndex] > this[largest]) largest = rightIndex
     if (leftIndex < heapSize && this[leftIndex] > this[largest]) largest = leftIndex
@@ -27,27 +42,23 @@ tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 1, heapSize: In
 }
 
 fun <T: Comparable<T>> ArrayList<T>.buildHeap() {
-    for (i in (size) / 2 downTo 1) {
+    for (i in (size) / 2 downTo 0) {
         this.heapify(i)
     }
 }
 
 fun <T: Comparable<T>> ArrayList<T>.heappush(item: T) {
     var idx = size
-    if (idx == 0) add(item)
     add(item)
-    while (idx != 1 && item > this[idx/2]) {
+    while (idx != 0 && item > this[idx/2]) {
         Collections.swap(this, idx, idx/2)
         idx /= 2
     }
 }
 
-fun <T: Comparable<T>> ArrayList<T>.heappop() {
-    Collections.swap(this, 1, size-1)
+fun <T: Comparable<T>> ArrayList<T>.heappop() : T {
+    Collections.swap(this, 0, size-1)
     val popValue = removeLast()
     heapify()
+    return popValue
 }
-
-val root = arrayOf(1, 2, 3, 4)
-
-tailrec fun find(x: Int): Int = if (root[x] == x) x else find(root[x])

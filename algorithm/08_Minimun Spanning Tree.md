@@ -84,47 +84,55 @@ Spanning Tree 중에서 사용된 간선들의 가중치 합이 최소인 트리
 
 ### Kruskal 알고리즘의 구현
 
-```python
-def find(x):
+```kotlin
+fun find(x: Int) {
+    if (root[x] == x) return x
+    root[x] = find(root[x])
+    return root[x]
+}
     if root[x] == x:
         return x
     # 경로 압축(path compression)을 통해 find 연산의 시간복잡도를 줄인다.
     root[x] = find(root[x])
     return root[x]
 
-
-def union(x, y):
-    x = find(x)
-    y = find(y)
+fun union(x: Int, y: Int) {
+    val xRoot = find(x)
+    val yRoot = find(y)
     
     # 만약 두 정점의 루트가 동일하다면, 이미 같은 집합에 속해 있는 것이기 때문에
     # False를 반환하고 union을 종료한다. 
-    if x == y:
-        return False
+    if (xRoot == yRoot) return false
     
-    if rank[x] < rank[y]:
-        root[x] = y
-    else:
-        root[y] = x
-        if rank[x] == rank[y]:
-            rank[x] += 1
-    return True
-
+    if (rank[xRoot] < rank[yRoot]) root[xRoot] = yRoot
+    else {
+        root[yRoot] = xRoot
+        if (rank[rootX] == rank[rootY]) rank[rootX]++
+    }
+}
 
 # 각 노드들의 루트가 저장될 리스트
-root = [i for i in range(N + 1)]
+val root = Array(N + 1) { it }
 # 인덱스를 루트로 하는 트리의 레벨이 기록될 리스트
-rank = [0] * (N + 1)
-res = 0
+val rank = Array(N + 1) { 0 }
+var result = 0
 
 # 노드1, 노드2, 가중치 순으로 입력을 받았다면 2번 인덱스(가중치)를 기준으로 오름차순 정렬해준다.
-edges = [list(map(int, input().split())) for _ in range(M)]
-edges.sort(key=lambda x: x[2])
-for n1, n2, w in edges:
-    # 만약 union에 성공했다면(사이클을 형성하지 않았다면) 가중치 누적 합계를 갱신한다.
-    if union(n1, n2):
-        res += w
+val edges = Array(E) { Array(3) { 0 } }
+edges.sortWith {
+    kotlin.Comparator { p1, p2 ->
+        when {
+            p1[0] > p2[0] -> -1
+            p1[0] < p2[0] -> 1
+            p1[0] == p2[0] -> 0
+        }                  
+    }
+}
 
+for (edge in edges) {
+    # 만약 union에 성공했다면(사이클을 형성하지 않았다면) 가중치 누적 합계를 갱신한다.
+    if (union(edge[0], edge[1])) result += edge[2]
+}
 ```
 
 - 시간복잡도 : **O(ElogE)**, 데이터 수가 n개일 때 `find`연산과 `union` 연산의 시간복잡도는 **O(logn)**이다. 이를 전체 간선에 대해 반복 수행하므로, 반복문에서 필요한 계산량은 **O(ElogE)**가 된다.

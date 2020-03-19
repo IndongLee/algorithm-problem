@@ -81,9 +81,9 @@
 <img src="images/05_Heap/heap03.png" style="zoom:50%;" />
 
 ```kotlin
-tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 1, heapSize: Int = size) {
-    val leftIndex = index * 2
-    val rightIndex = index * 2 + 1
+tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 0, heapSize: Int = size) {
+    val leftIndex = index * 2 + 1
+    val rightIndex = index * 2 + 2
     var largest = index
     if (rightIndex < heapSize && this[rightIndex] > this[largest]) largest = rightIndex
     if (leftIndex < heapSize && this[leftIndex] > this[largest]) largest = leftIndex
@@ -111,9 +111,8 @@ tailrec fun <T: Comparable<T>> ArrayList<T>.heapify(index: Int = 1, heapSize: In
 // 최대힙
 fun <T: Comparable<T>> ArrayList<T>.heappush(item: T) {
     var idx = size
-    if (idx == 0) add(item)
     add(item)
-    while (idx != 1 && item > this[idx/2]) {
+    while (idx != 0 && item > this[idx/2]) {
         Collections.swap(this, idx, idx/2)
         idx /= 2
     }
@@ -134,10 +133,11 @@ fun <T: Comparable<T>> ArrayList<T>.heappush(item: T) {
 <br />
 
 ```kotlin
-fun <T: Comparable<T>> ArrayList<T>.heappop() {
-    Collections.swap(this, 1, size-1)
+fun <T: Comparable<T>> ArrayList<T>.heappop(): T {
+    Collections.swap(this, 0, size-1)
     val popValue = removeLast()
     heapify()
+    return popValue
 }
 ```
 
@@ -157,7 +157,7 @@ fun <T: Comparable<T>> ArrayList<T>.heappop() {
 
 ```kotlin
 fun <T: Comparable<T>> ArrayList<T>.buildHeap() {
-    for (i in size / 2 downTo 1) {
+    for (i in (size) / 2 downTo 0) {
         this.heapify(i)
     }
 }

@@ -70,29 +70,37 @@
 
 1. s에서 임의의 정점까지의 가중치 누적합이 저장될 리스트를 만들고, 그 값들을 무한대로 초기화한다.
 
-   ```python
-   from heapq import heappop, heappush
+   ```kotlin
+   // heap은 이미 구현되어 있다고 가정한다.
+   data class Edge(val weight: Int, val node: Int) : Comparable<Edge> {
+       override fun compareTo(other: Edge) = when {
+           weight < other.weight -> -1
+           weight > other.weight -> 1
+           else -> 0
+       }
+   }
    
-   INF = float('inf')
-   cost = [INF] * (V + 1)
-   queue = []
+   val INF = Int.MAX_VALUE
+   val dis = Array( V + 1 ) { INF }
+   val pQueue = arrayListOf<Edge>(Edge(0, start))
    ```
 
 2. 시작 노드 s(1번 인덱스)를 기준으로 BFS를 실시한다. 다음 노드로 가는 간선의 가중치를 우선순위로 하여 힙에 삽입한다.
 
-   ```python
+   ```kotlin
    # (0, 0) : (1번 노드에서 1번 노드로 가는 가중치, 1번 노드)
-   heappush(queue, (0, 1))
-   dis[1] = 0
-   while queue:
-       cur_cost, now = heappop(queue)
-       if cur_cost > cost[now]:
-           continue
-       for next_cost, next in adj[now]:
-           temp = dis[now] + next_cost
-           if temp < cost[next]:
-               cost[nxt] = temp
-               heappush(queue, (temp, next))
+   dis[start] = 0
+   while (pQueue.isNotEmpty()) {
+       val cur = pQueue.heappop()
+       if (cur.weight > dis[cur.node]) continue
+       for (next in adj[cur.node]) {
+           val temp = dis[cur.node] + next.weight
+           if (dis[next.node] > temp) {
+               dis[next.node] = temp
+               pQueue.heappush(Edge(temp, next.node))
+           }
+       }
+   }
    ```
 
 - 시간복잡도 : **O(ElogV)** - 우선순위 큐를 사용할 경우, **O(V<sup>2</sup>+E)** - 우선순위 큐를 사용하지 않을 경우
@@ -124,24 +132,24 @@
 
 ### 벨만-포드 알고리즘의 구현
 
-```python
-def bellman_ford():
-    INF = float('inf')
-    cost = [INF] * (V + 1)
-    cost[1] = 0
-
-    for i in range(1, V + 1):
-        # path = [(1, 2, 8), (1, 3, -2), ... , (4, 6, 5)]
-        for start, end, weight in path:
-            temp = cost[start] + weight
-            if cost[end] > temp:
-                cost[end] = temp
-
-    for start, end, weight in path:
-        if cost[end] <= cost[start] + weight:
-            return False
-        
-    return True
+```kotlin
+fun bellmanFord():
+    val INF = Int.MAX_VALUE
+    val dis = Array( V + 1 ) { INF }
+    dis[1] = 0
+    
+    for (i in 1..V) {
+        // path = [[1, 2, 8], [1, 3, -2], ... , [4, 6, 5]]
+        for (path in paths) {
+            temp = dis[path[0]] + path[2]
+            if (dis[path[1]] > temp) dis[path[1]] = temp
+        }
+    }
+    
+    for (path in paths) {
+        if (dis[path[1]] <= dis[path[0]] + path[2]) return false
+    }
+    retrun true
 ```
 
 - 시간복잡도 :  **O(VE)**, 그래프 모든 엣지에 대해 `edge relaxation`을 시작노드를 제외한 전체 노드수 만큼 반복 수행하고, 마지막으로 그래프 모든 엣지에 대해 `edge relaxation`을 1번 수행해 주기 때문이다.
@@ -180,12 +188,14 @@ def bellman_ford():
 |  4   |  2   | INF  |  -5  |  0   | INF  |
 |  5   | INF  | INF  | INF  |  6   |  0   |
 
-```python
-for k in range(V):
-    for i in range(V):
-        for j in range(V):
-            if dp[i][k] != INF and dp[k][j] != INF:
-                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j])
+```kotlin
+for (k in 1..V) {
+    for (i in 1..V) {
+        for (j in 1..V) {
+            if (dp[i][k] != INF && dp[k][j] != INF) dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j])
+        }
+    }
+}
 ```
 
 - 시간복잡도 : **O(V<sup>3</sup>)**
