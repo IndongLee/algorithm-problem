@@ -617,3 +617,69 @@ fun <T: Comparable<T>> Array<T>.heapSort() {
 }
 ```
 
+<br />
+
+<br />
+
+## 위상 정렬(Topological Sort)
+
+어떤 일을 하는 순서를 찾는 알고리즘이다.
+
+- 즉, 방향 그래프에 존재하는 각 정점들의 선행 순서를 위배하지 않으면서 모든 정점을 나열하는 것
+
+<br />
+
+### 위상 정렬의 특징
+
+![sort08](09_Sort Algorithm.assets/sort08.png)
+
+<br />
+
+- 하나의 방향 그래프에는 여러 위상 정렬이 가능하다.
+- 위상 정렬의 과정에서 선택되는 정점의 순서를 `위상 순서(Topological Order)`라 한다.
+- 위상 정렬의 과정에서 그래프에 남아 있는 정점 중에 진입 차수가 0인 정점이 없다면, 위상 정렬 알고리즘은 중단되고 이러한 그래프로 표현된 문제는 실행이 불가능한 문제가 된다.
+
+<br />
+
+### 위상 정렬의 원리
+<img src="images/09_Sort/sort09.png" style="zoom:33%;" />
+
+<br />
+
+- 진입 차수가 0인 정점(즉, 들어오는 간선의 수가 0)을 선택
+  - 진입 차수가 0인 정점이 여러 개 존재할 경우 어느 정점을 선택해도 무방하다.
+  - 초기에 간선의 수가 0인 모든 정점을 큐에 삽입
+- 선택된 정점과 여기에 부속된 모든 간선을 삭제
+  - 선택된 정점을 큐에서 삭제
+  - 선택된 정점에 부속된 모든 간선에 대해 간선의 수를 감소
+- 위의 과정을 반복해서 모든 정점이 선택, 삭제되면 알고리즘 종료
+
+<br />
+
+### 힙 정렬의 구현
+
+```kotlin
+// 간선의 수에 대한 배열 countEdge, 인접리스트 graph가 있다고 가정한다.
+fun topologicalStart(graph: ArrayList<ArrayList<Int>>, countEdge: IntArray): IntArray {
+    val queue: Queue<Int> = LinkedList()
+    val sortedArray = IntArray(countEdge.size - 1) { 0 }
+    
+    for (i in 1 until N+1) {
+        if (countEdge[i] == 0) queue.add(i)
+    }
+    
+    for (i in 1..N) {
+        val cur = queue.remove()
+        sortedArray.add(cur)
+        
+        for (next in graph[cur]) {
+            countEdge[next]--
+            
+            if (countEdge[next] == 0) queue.add(next)
+        }
+    }
+    
+    return sortedArray
+}
+```
+
