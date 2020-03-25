@@ -1,33 +1,31 @@
 package Programmers
 
+import kotlin.math.max
 import kotlin.math.pow
 
-fun String.powerset(): Set<String> = powerset(this, setOf(""))
-
-private tailrec fun powerset(left: String, acc: Set<String>): Set<String> = when {
-    left == "" -> acc
-    else -> powerset(left.substring(1 until left.length), acc + acc.map { it + left[0] })
+fun checkNumber(number: Int, targetArray: IntArray): Boolean {
+    var n = number
+    while (n != 0) {
+        targetArray[n%10]--
+        if (targetArray[n%10] < 0) return false
+        n /= 10
+    }
+    return true
 }
 
 private fun solution(numbers: String): Int {
-    val prime = Array(10.0.pow(numbers.length.toDouble()).toInt() + 1) { true }
-    prime[0] = false
-    prime[1] = false
-    for (i in 2 until prime.size) {
-        if (!prime[i]) continue
-        for (j in i*2 until prime.size step i) prime[j] = false
-    }
+    val maxNum = numbers.toCharArray().sortedDescending().fold("") {acc, c -> acc + c.toString() }.toInt()
     var answer = 0
-    numbers.powerset().drop(1).forEach {
-        println(it)
-        if (prime[it.toInt()]) {
-            prime[it.toInt()] = false
-            answer++
-        }
+    val numbersArray = IntArray(10) { 0 }
+    numbers.forEach { numbersArray[it.toString().toInt()]++ }
+    val prime = Array(maxNum + 1) { true }
+    for (i in 2..maxNum) {
+        if (!prime[i]) continue
+        if (checkNumber(i, numbersArray.copyOf())) answer++
+        for (j in i*2..maxNum step i) prime[j] = false
     }
     return answer
 }
-
 
 
 fun main() {
