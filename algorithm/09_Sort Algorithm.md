@@ -631,7 +631,7 @@ fun <T: Comparable<T>> Array<T>.heapSort() {
 
 ### 위상 정렬의 특징
 
-![sort08](09_Sort Algorithm.assets/sort08.png)
+<img src="images/09_Sort/sort08.png" style="zoom:33%;" />
 
 <br />
 
@@ -656,7 +656,7 @@ fun <T: Comparable<T>> Array<T>.heapSort() {
 
 <br />
 
-### 힙 정렬의 구현
+### 위상 정렬의 구현
 
 ```kotlin
 // 간선의 수에 대한 배열 countEdge, 인접리스트 graph가 있다고 가정한다.
