@@ -326,7 +326,10 @@
    - 이진 탐색 트리를 구현하기 위해 먼저 `Node` 클래스를 정의한다. `Node`클래스는 노드값(`data`)과 좌/우 노드(`left`, `right`), 총 세 개의 속성을 가진다. 초기화할 때는 데이터 값만 주어지고 좌우 노드가 비어있다.
 
    ```python
-   class Node<T>(val data: T, var left: Node<T>? = null, var right: Node<T>? = null)
+   sealed class Node<out T> {
+       class Value<T> (val value: T, val left: Node<T> = EmptyNode, val right: Node<T> = EmptyNode) : Node<T>()
+       object EmptyNode : Node<Nothing>()
+   }
    ```
    
 2. 이진 탐색 트리 클래스인 `BinarySearchTree`를 구현한다.

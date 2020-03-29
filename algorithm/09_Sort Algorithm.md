@@ -609,8 +609,8 @@ tailrec fun <T: Comparable<T>> Array<T>.heapify(index: Int = 0, heapSize: Int = 
 
 fun <T: Comparable<T>> Array<T>.heapSort() {
     val n = size
-    for (i in n/2 downTo 0 step 1) this.heapify(i, n)
-    for (i in n-1 downTo 0 -1) {
+    for (i in n/2 downTo 0) this.heapify(i, n)
+    for (i in n-1 downTo 0) {
         swap(0, i)
         heapify(0, i)
     }

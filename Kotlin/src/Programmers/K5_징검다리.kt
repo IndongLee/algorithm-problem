@@ -1,7 +1,5 @@
 package Programmers
 
-import java.lang.Integer.max
-
 private fun solution(stones: IntArray, k: Int): Int {
     var answer = stones.max()!!
     val len = stones.size
