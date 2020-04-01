@@ -1,7 +1,4 @@
-package Programmers
-
-import kotlin.math.max
-import kotlin.math.pow
+package Programmers.L2
 
 fun checkNumber(number: Int, targetArray: IntArray): Boolean {
     var n = number

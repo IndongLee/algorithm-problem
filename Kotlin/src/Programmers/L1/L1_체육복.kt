@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L1
 
 private fun solution(n: Int, lost: IntArray, reserve: IntArray): Int {
     var answer = 0

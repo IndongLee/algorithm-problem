@@ -1,6 +1,4 @@
-package Programmers
-
-import kotlin.math.ln1p
+package Programmers.L2
 
 private fun solution(priorities: IntArray, location: Int): Int {
     return priorities.indices.asSequence().groupBy { priorities[it] }

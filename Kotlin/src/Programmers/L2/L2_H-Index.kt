@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 private fun solution(citations: IntArray): Int {
     var answer = 0

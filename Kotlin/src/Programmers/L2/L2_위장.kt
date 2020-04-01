@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 private fun solution(clothes: Array<Array<String>>): Int {
     val clothesMap = HashMap<String, ArrayList<String>>()
@@ -14,5 +14,13 @@ private fun solution(clothes: Array<Array<String>>): Int {
 //}
 
 fun main() {
-    println(solution(arrayOf(arrayOf("yellow_hat", "headgear"), arrayOf("blue_sunglasses", "eyewear"), arrayOf("green_turban", "headgear"))))
+    println(
+        solution(
+            arrayOf(
+                arrayOf("yellow_hat", "headgear"),
+                arrayOf("blue_sunglasses", "eyewear"),
+                arrayOf("green_turban", "headgear")
+            )
+        )
+    )
 }

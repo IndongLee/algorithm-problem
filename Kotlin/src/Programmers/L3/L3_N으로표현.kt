@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L3
 
 private fun solution(N: Int, number: Int): Int {
     var answer = -1

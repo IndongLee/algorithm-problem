@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L3
 
 private fun solution(genres: Array<String>, plays: IntArray): IntArray {
     val answer = arrayListOf<Int>()
@@ -38,5 +38,10 @@ private fun solution(genres: Array<String>, plays: IntArray): IntArray {
 //}
 
 fun main() {
-    println(solution(arrayOf("classic", "pop", "classic", "classic", "pop", "rock"), intArrayOf(500, 600, 150, 800, 2500, 100)))
+    println(
+        solution(
+            arrayOf("classic", "pop", "classic", "classic", "pop", "rock"),
+            intArrayOf(500, 600, 150, 800, 2500, 100)
+        )
+    )
 }

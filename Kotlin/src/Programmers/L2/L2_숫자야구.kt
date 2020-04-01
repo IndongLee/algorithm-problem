@@ -1,6 +1,4 @@
-package Programmers
-
-import java.util.*
+package Programmers.L2
 
 private fun solution(baseball: Array<IntArray>): Int {
     var cand = Array(1000 - 123) { (it + 123).toString() }.filter { !it.contains('0') && it[0] != it[1] && it[1] != it[2] && it[0] != it[2] }
@@ -21,5 +19,12 @@ fun baseballGame(target: String, ball: String): IntArray {
 }
 
 fun main() {
-    solution(arrayOf(intArrayOf(123, 1, 1), intArrayOf(356, 1, 0), intArrayOf(327, 2, 0), intArrayOf(489, 0, 1)))
+    solution(
+        arrayOf(
+            intArrayOf(123, 1, 1),
+            intArrayOf(356, 1, 0),
+            intArrayOf(327, 2, 0),
+            intArrayOf(489, 0, 1)
+        )
+    )
 }

@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 private fun solution(s: String): IntArray {
     return s.substring(2 until s.length-2)

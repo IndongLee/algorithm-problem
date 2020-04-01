@@ -1,6 +1,4 @@
-package Programmers
-
-import java.util.*
+package Programmers.L2
 
 private fun solution(numbers: IntArray): String {
     var answer = ""

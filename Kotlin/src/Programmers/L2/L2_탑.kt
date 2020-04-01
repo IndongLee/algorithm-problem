@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 import java.util.*
 
@@ -16,5 +16,5 @@ private fun solution(heights: IntArray): IntArray {
 }
 
 fun main() {
-    println(Arrays.toString(solution(intArrayOf(1,5,3,6,7,6,5))))
+    println(Arrays.toString(solution(intArrayOf(1, 5, 3, 6, 7, 6, 5))))
 }

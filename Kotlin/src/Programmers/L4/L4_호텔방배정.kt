@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L4
 
 private fun solution(k: Long, room_number: LongArray): LongArray {
     val parent = hashMapOf<Long, Long>()

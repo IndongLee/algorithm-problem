@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 fun solution(record: Array<String>): Array<String> {
     val userMap = hashMapOf<String, String>()
@@ -12,5 +12,14 @@ fun solution(record: Array<String>): Array<String> {
 }
 
 fun main() {
-    println(solution(arrayOf("Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan")).contentToString())
+    println(
+        solution(
+            arrayOf(
+                "Enter uid1234 Muzi",
+                "Enter uid4567 Prodo",
+                "Leave uid1234",
+                "Enter uid1234 Prodo",
+                "Change uid4567 Ryan"
+            )
+        ).contentToString())
 }

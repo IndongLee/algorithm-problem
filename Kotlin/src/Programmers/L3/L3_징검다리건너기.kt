@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L3
 
 private fun solution(stones: IntArray, k: Int): Int {
     var answer = stones.max()!!

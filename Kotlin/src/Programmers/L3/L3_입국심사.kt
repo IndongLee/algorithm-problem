@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L3
 
 private fun solution(n: Int, times: IntArray): Long {
     var min = 1L

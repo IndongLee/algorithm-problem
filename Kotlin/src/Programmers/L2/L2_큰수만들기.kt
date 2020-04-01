@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 private fun solution(number: String, k: Int): String {
     var count = k

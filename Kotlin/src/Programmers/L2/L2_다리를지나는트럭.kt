@@ -1,4 +1,4 @@
-package Programmers
+package Programmers.L2
 
 import java.util.*
 
@@ -27,5 +27,5 @@ private fun solution(bridge_length: Int, weight: Int, truck_weights: IntArray): 
 }
 
 fun main() {
-    println(solution(100, 100, intArrayOf(10,10,10,10,10,10,10,10,10,10)))
+    println(solution(100, 100, intArrayOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10)))
 }
