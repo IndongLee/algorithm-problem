@@ -1,34 +1,41 @@
 package Programmers.L3
 
-import kotlin.collections.ArrayList
+import java.util.*
 
 private fun solution(tickets: Array<Array<String>>): Array<String> {
-    val start = hashMapOf<String, ArrayList<Int>>()
-    tickets.forEachIndexed { index, ticket ->
-        if (!start.containsKey(ticket[0])) {
-            start[ticket[0]] = arrayListOf()
+    val adj = hashMapOf<String, LinkedList<String>>()
+    tickets.forEach {
+        if (!adj.containsKey(it[0])) adj[it[0]] = LinkedList()
+        adj[it[0]]!!.add(it[1])
+    }
+    adj.map { it.value.sort() }
+
+    val stack = Stack<String>()
+    stack.add("ICN")
+    val path = arrayListOf<String>()
+
+    while (stack.isNotEmpty()) {
+        val cur = stack.peek()
+        if (!adj.containsKey(cur) || adj[cur]!!.isEmpty()) {
+            path.add(stack.pop())
+        } else {
+            stack.add(adj[cur]!!.pop())
         }
-        start[ticket[0]]!!.add(index)
     }
 
-    val adj = hashMapOf<Int, ArrayList<Int>>()
-    tickets.forEach {  }
-    println(start)
-
-
-    return arrayOf()
+    return path.reversed().toTypedArray()
 }
-
-
 
 fun main() {
     println(
         solution(
             arrayOf(
-                arrayOf("ICN", "JFK"),
-                arrayOf("HND", "IAD"),
-                arrayOf("JFK", "HND")
+                arrayOf("ICN", "SFO"),
+                arrayOf("ICN", "ATL"),
+                arrayOf("SFO", "ATL"),
+                arrayOf("ATL", "ICN"),
+                arrayOf("ATL", "SFO")
             )
-        )
+        ).contentToString()
     )
 }
