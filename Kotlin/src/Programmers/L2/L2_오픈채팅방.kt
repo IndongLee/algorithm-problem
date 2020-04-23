@@ -1,6 +1,6 @@
 package Programmers.L2
 
-fun solution(record: Array<String>): Array<String> {
+private fun solution(record: Array<String>): Array<String> {
     val userMap = hashMapOf<String, String>()
     val command = mapOf("Enter" to "들어왔습니다.", "Leave" to "나갔습니다.")
     return record.map {
