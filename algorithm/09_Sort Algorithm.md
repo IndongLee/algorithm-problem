@@ -36,9 +36,9 @@ fun <T> Array<T>.swap(left: Int, right: Int) {
 
 fun <T: Comparable<T>> bubbleSort(array: Array<T>): Array<T> {
     for (order in array.size downTo 0) {
-        for (i in 0 until order) {
-            if (array[i] > array[i+1]) {
-                array.swap(i, i+1)
+        for (i in 1 until order) {
+            if (array[i] < array[i-1]) {
+                array.swap(i, i-1)
             }
         }
     }
